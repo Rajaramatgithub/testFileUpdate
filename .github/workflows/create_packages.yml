@@ -4,7 +4,7 @@ on:
   push:
 
 jobs:
-  wheel creation:
+  wheel_creation:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.event.head_commit.modified.includes('requirements.txt')
     steps:
@@ -21,7 +21,7 @@ jobs:
         name: new-wheel
         path: dist/
 
-  python file update:
+  python_file_update:
     runs-on: ubuntu-latest
     if: contains(github.event.head_commit.modified, '*.py')
     steps:
