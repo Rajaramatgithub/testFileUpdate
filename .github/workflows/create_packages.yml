@@ -15,10 +15,7 @@ jobs:
 
     - name: Create wheel
       run: |
-        CHANGED=$(git diff HEAD~1 --name-only)
-        if echo $CHANGED | grep -q "requirements.txt"; then
-          pip wheel . -w dist/
-        fi
+        pip wheel -r requirements.txt -w dist/
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
