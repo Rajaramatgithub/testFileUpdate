@@ -33,21 +33,27 @@ jobs:
         name: new-wheel
         path: dist/
 
-  # python_file_update:
-  #   runs-on: ubuntu-latest
-  #   if: contains(github.event.head_commit.modified, '*.py')
-  #   steps:
-  #   - name: Checkout code
-  #     uses: actions/checkout@v2
+  python_file_update:
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.modified, '*.py')
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-  #   - name: Get list of modified files
-  #     run: |
-  #       CHANGED=$(git diff HEAD~1 --name-only)
-  #       echo $CHANGED
-  #   - name: Get list of python files
-  #     run: |
-  #       PY_FILES=$(echo $CHANGED | grep -E "\.py$")
-  #       echo $PY_FILES
-  #   - name: Run tests
-  #     run: |
-  #       pytest $PY_FILES
+    - name: Get changed files requirements.txt
+      id: changed-files-py
+      uses: tj-actions/changed-files@v35
+      with:
+        files: py_files/*.py
+
+    - name: Get list of python files
+      if: steps.changed-files-py.outputs.any_changed == 'true'
+      run: |
+        echo "One or more files in the docs folder has changed."
+        echo "List all the files that have changed: ${{ steps.changed-files-specific.outputs.all_changed_files }}"
+        
+    - name: Run tests
+      run: |
+        for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+          pytest $file
+        done
