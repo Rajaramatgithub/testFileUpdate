@@ -49,11 +49,11 @@ jobs:
       if: steps.changed-files-py.outputs.any_changed == 'true'
       run: |
         echo "One or more files in the docs folder has changed."
-        echo "List all the files that have changed: ${{ steps.changed-files-specific.outputs.all_changed_files }}"
+        echo "List all the files that have changed: ${{ steps.changed-files-py.outputs.all_changed_files }}"
 
     - name: Run tests
       if: steps.changed-files-py.outputs.any_changed == 'true'
       run: |
-        for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+        for file in ${{ steps.changed-files-py.outputs.all_changed_files }}; do
           pytest $file
         done
