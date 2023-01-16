@@ -35,7 +35,6 @@ jobs:
 
   python_file_update:
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.modified, '*.py')
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -51,7 +50,7 @@ jobs:
       run: |
         echo "One or more files in the docs folder has changed."
         echo "List all the files that have changed: ${{ steps.changed-files-specific.outputs.all_changed_files }}"
-        
+
     - name: Run tests
       run: |
         for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
