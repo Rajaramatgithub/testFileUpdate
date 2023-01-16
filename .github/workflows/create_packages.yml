@@ -1,0 +1,27 @@
+name: Build Wheel
+
+on:
+  push:
+    paths:
+    - requirements.txt
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Create wheel
+      run: |
+        CHANGED=$(git diff HEAD~1 --name-only)
+        if echo $CHANGED | grep -q "requirements.txt"; then
+          pip wheel . -w dist/
+        fi
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: new-wheel
+        path: dist/
