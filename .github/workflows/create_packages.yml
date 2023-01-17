@@ -39,7 +39,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Get changed files requirements.txt
+    - name: Get changed files py files
       id: changed-files-py
       uses: tj-actions/changed-files@v35
       with:
@@ -59,3 +59,22 @@ jobs:
           echo $file
           # pylint $file
         done
+
+  glue_trigger:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Get changed files
+      id: changed-files-py
+      uses: tj-actions/changed-files@v35
+      with:
+        files: |
+            py_files/*.py
+            requirements.txt
+
+    - name: Get list of python files
+      if: steps.changed-files-py.outputs.any_changed == 'true'
+      run: |
+        echo "trigger glue job"
