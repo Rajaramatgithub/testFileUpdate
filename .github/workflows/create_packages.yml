@@ -61,6 +61,10 @@ jobs:
         done
 
   glue_trigger:
+    needs: [
+        wheel_creation,
+        python_file_update
+      ]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
