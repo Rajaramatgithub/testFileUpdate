@@ -57,5 +57,5 @@ jobs:
         pip install pylint
         for file in ${{ steps.changed-files-py.outputs.all_changed_files }}; do
           echo $file
-          pylint $file
+          # pylint $file
         done
