@@ -74,7 +74,7 @@ jobs:
             py_files/*.py
             requirements.txt
 
-    - name: Get list of python files
+    - name: Trigger glue job
       if: steps.changed-files-py.outputs.any_changed == 'true'
       run: |
         echo "trigger glue job"
