@@ -6,4 +6,4 @@ setup(
         "gspread~=5.7.1",
         "dynamo_json~= 1.2.0"
     ]
-) 
+)
