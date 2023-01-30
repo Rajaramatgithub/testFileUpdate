@@ -24,7 +24,7 @@ jobs:
     - name: Create wheel
       if: steps.changed-files-specific.outputs.any_changed == 'true'
       run: |
-        python3 setup.py bdist_wheel
+        python3 module/aws_glue_job_googlesheet_infra_tf_module/scripts/aws_glue_source/setup.py bdist_wheel
 
     - name: Upload artifact
       if: steps.changed-files-specific.outputs.any_changed == 'true'

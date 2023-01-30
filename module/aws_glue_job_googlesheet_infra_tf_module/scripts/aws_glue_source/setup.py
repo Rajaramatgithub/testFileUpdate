@@ -7,3 +7,4 @@ setup(
         "dynamo_json~= 1.2.0"
     ]
 )
+
