@@ -25,6 +25,7 @@ jobs:
       if: steps.changed-files-specific.outputs.any_changed == 'true'
       run: |
         python3 module/aws_glue_job_googlesheet_infra_tf_module/scripts/aws_glue_source/setup.py bdist_wheel
+        python3 upload_s3.py <bucketname> <pathinbucket> dist/glue_python_shell_sample_module-0.1-py3-none-any.whl
 
     - name: Upload artifact
       if: steps.changed-files-specific.outputs.any_changed == 'true'
@@ -32,3 +33,49 @@ jobs:
       with:
         name: new-wheel
         path: dist/
+
+  python_file_update:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Get changed files py files
+      id: changed-files-py
+      uses: tj-actions/changed-files@v35
+      with:
+        files: module/aws_glue_job_googlesheet_infra_tf_module/scripts/aws_glue_source/googlesheets.py
+
+    - name: Get list of python files
+      if: steps.changed-files-py.outputs.any_changed == 'true'
+      run: |
+        echo "One or more files in the docs folder has changed."
+        echo "List all the files that have changed: ${{ steps.changed-files-py.outputs.all_changed_files }}"
+
+    - name: upload to bucket
+      if: steps.changed-files-py.outputs.any_changed == 'true'
+      run: |
+        python3 upload_s3.py <bucketname> <pathinbucket> module/aws_glue_job_googlesheet_infra_tf_module/scripts/aws_glue_source/googlesheets.py
+        
+  glue_trigger:
+    needs: [
+        wheel_creation,
+        python_file_update
+      ]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Get changed files
+      id: changed-files-py
+      uses: tj-actions/changed-files@v35
+      with:
+        files: |
+            module/aws_glue_job_googlesheet_infra_tf_module/scripts/aws_glue_source/setup.py
+            module/aws_glue_job_googlesheet_infra_tf_module/scripts/aws_glue_source/googlesheets.py
+
+    - name: Trigger glue job
+      if: steps.changed-files-py.outputs.any_changed == 'true'
+      run: |
+        echo "trigger glue job"
