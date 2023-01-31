@@ -1,6 +1,16 @@
-- name: Get secret from base64
-  env:
-    KEYSTORE_BASE64: ${{ secrets.AWS_ACCESS_KEY }}
-  run: |
-    echo import certificate from secrets and regenerate the file
-    echo $KEYSTORE_BASE64 | base64 -d > $RUNNER_TEMP/my_production.keystore
+name: Get secret from base64
+
+on:
+  push:
+
+jobs:
+  wheel_creation:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get secret from base64
+      env:
+        KEYSTORE_BASE64: ${{ secrets.AWS_ACCESS_KEY }}
+      run: |
+        echo import certificate from secrets and regenerate the file
+        echo $KEYSTORE_BASE64 | base64 -d > $RUNNER_TEMP/my_production.keystore
